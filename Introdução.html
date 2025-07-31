@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mult Distribuidora</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      background: #fff;
+      color: #222;
+    }
+
+    /* Cabeçalho */
+    header {
+      border-bottom: 1px solid #ddd;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    /* Logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .logo-text {
+      font-weight: 700;
+      font-size: 20px;
+      color: #c41e22;
+      user-select: none;
+    }
+    .logo-text span {
+      font-weight: 400;
+      color: #666;
+      margin-left: 4px;
+      font-size: 14px;
+    }
+
+    /* Barra de pesquisa */
+    .search-bar {
+      flex-grow: 1;
+      max-width: 400px;
+      margin: 0 20px;
+      position: relative;
+    }
+    .search-bar input[type="search"] {
+      width: 100%;
+      padding: 8px 40px 8px 12px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+    .search-bar input[type="search"]:focus {
+      outline: none;
+      border-color: #c41e22;
+    }
+    .search-bar button {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #c41e22;
+      font-size: 18px;
+    }
+
+    /* Menu categorias */
+    nav {
+      width: 100%;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+    }
+   nav ul {
+  list-style: none;
+  display: flex;
+  gap: 16px;
+  padding: 12px 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 15px;
+}
+
+nav ul li {
+  position: relative;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background 0.2s, color 0.2s;
+}
+
+nav ul li a:hover {
+  background: #f8f8f8;
+  color: #c41e22;
+}
+    
+    nav ul li .dropdown-icon {
+      font-size: 12px;
+      margin-left: 4px;
+    }
+
+    /* Botão "Todas as categorias" com dropdown (dummy) */
+    .dropdown {
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 8px 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  z-index: 100;
+  min-width: 180px;
+  border-radius: 4px;
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.dropdown-content a {
+  display: block;
+  padding: 6px 0;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.dropdown-content a:hover {
+  color: #c41e22;
+}
+
+.dropdown.active .dropdown-content {
+  display: block;
+}
+
+/* Animação suave de entrada */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}     
+
+    
+    /* Banner */
+    .banner {
+      max-width: 1200px;
+      margin: 30px auto;
+      padding: 0 20px;
+      position: relative;
+    }
+    .banner img {
+      width: 100%;
+      border-radius: 6px;
+      max-height: 380px;
+      object-fit: contain;
+      user-select: none;
+    }
+    .banner-text {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      color: #c41e22;
+      font-weight: 700;
+      font-size: 26px;
+      background: rgba(255,255,255,0.85);
+      padding: 10px 20px;
+      border-radius: 8px;
+      user-select: none;
+    }
+    .banner-text small {
+      display: block;
+      font-weight: 400;
+      font-size: 14px;
+      margin-bottom: 8px;
+      color: #555;
+    }
+
+    /* Ícone WhatsApp fixo */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #25d366;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+      z-index: 200;
+      transition: background 0.3s;
+    }
+    .whatsapp-float:hover {
+      background: #1ebe5b;
+    }
+    .whatsapp-float svg {
+      fill: white;
+      width: 28px;
+      height: 28px;
+    }
+
+    .vitrine {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.vitrine h2 {
+  font-size: 24px;
+  color: #c41e22;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #c41e22;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.produto {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+
+.produto:hover {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.produto img {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+  object-fit: contain;
+}
+
+.produto h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.preco {
+  color: #c41e22;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.produto button {
+  background: #c41e22;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.produto button:hover {
+  background: #a7181c;
+}
+
+.carrossel-produtos {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+  position: relative;
+}
+
+.carrossel-produtos h2 {
+  font-size: 24px;
+  color: #c41e22;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #c41e22;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.carousel-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+.produto-slide {
+  flex: 0 0 auto;
+  width: 220px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+  transition: box-shadow 0.2s;
+}
+
+.produto-slide:hover {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.produto-slide img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+  object-fit: contain;
+}
+
+.produto-slide h3 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.produto-slide .preco {
+  color: #c41e22;
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.produto-slide button {
+  background: #c41e22;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+}
+
+.produto-slide button:hover {
+  background: #a7181c;
+}
+
+.nav {
+  position: absolute;
+  top: 40%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.nav.prev {
+  left: 0;
+}
+.nav.next {
+  right: 0;
+}
+
+@media (max-width: 768px) {
+  .produto-slide {
+    width: 180px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="Introdução.html" class="logo" aria-label="Página inicial Mult Distribuidora">
+      <img src="img/osternack.jpeg" alt="Logo Mult Distribuidora" />
+      <div class="logo-text">
+        Osternack<span>bebidas</span>
+      </div>
+    </a>
+
+    <div class="search-bar">
+      <input type="search" placeholder="Digite o que você procura" aria-label="Pesquisar produtos" />
+      <button aria-label="Pesquisar">
+        🔍
+      </button>
+    </div>
+  </header>
+
+  <nav>
+    <ul>
+      <li class="dropdown">
+        <span>☰ Todas as categorias ▼</span>
+        <div class="dropdown-content">
+          <a href="bebidas.html">Bebidas</a>
+          <a href="bebidas alcoolicas.html">Bebidas alcoolicas</a>
+          <a href="carnes.html">Carnes</a>
+          <a href="frios.html">Frios</a>
+          <a href="biscoito.html">Biscoito e salgadinhos</a>
+          <a href="doces.html">Doces</a>
+          <a href="vinhos.html">Vinhos</a>
+        </div>
+      </li>
+      <li><a href="bebidas.html">Bebidas</a></li>
+      <li><a href="bebidas alcoolicas.html">Bebidas alcoolicas</a></li>
+      <li><a href="carnes.html">Carnes</a></li>
+      <li><a href="frios.html">Frios</a></li>
+      <li><a href="biscoito.html">Biscoito e salgadinhos</a></li>
+      <li><a href="doces.html">Doces</a></li>
+      <li><a href="vinhos.html">Vinhos</a></li>
+    </ul>
+  </nav>
+
+  <main>
+<section class="carrossel-produtos">
+    <h2>Mais Vendidos</h2>
+    <div class="carousel-container">
+      <button class="nav prev" aria-label="Anterior"></button>
+      <div class="carousel-track">
+
+        <!-- Produto 1 -->
+        <div class="produto-slide">
+          <img src="img/download__9_-removebg-preview.png" alt="Coca-Cola 2L">
+          <h3>Coca-Cola 2L</h3>
+          <p class="preco">R$ 7,90</p>
+        </div>
+
+        <!-- Produto 2 -->
+        <div class="produto-slide">
+          <img src="img/download__10_-removebg-preview.png" alt="Heineken 600ml">
+          <h3>Heineken 600ml</h3>
+          <p class="preco">R$ 6,50</p>
+        </div>
+
+        <!-- Produto 3 -->
+        <div class="produto-slide">
+          <img src="https://via.placeholder.com/180x180?text=Água+500ml" alt="Água 500ml">
+          <h3>Água Mineral 500ml</h3>
+          <p class="preco">R$ 1,50</p>
+        </div>
+
+        <!-- Produto 4 -->
+        <div class="produto-slide">
+          <img src="img/download__11_-removebg-preview.png" alt="Salgadinho">
+          <h3>Pacote de Salgadinho</h3>
+          <p class="preco">R$ 3,50</p>
+        </div>
+
+      </div>
+      <button class="nav next" aria-label="Próximo">›</button>
+    </div>
+  </section>
+
+  <!-- 🛒 VITRINE COM TODOS OS PRODUTOS -->
+  <section class="vitrine">
+    <h2>Todos os Produtos</h2>
+    <div class="produtos">
+
+      <!-- Produto 1 -->
+      <div class="produto">
+        <img src="img/download__9_-removebg-preview.png" alt="Refrigerante Coca-Cola 2L" />
+        <h3>Refrigerante Coca-Cola 2L</h3>
+        <p class="preco">R$ 7,90</p>
+      </div>
+
+      <!-- Produto 2 -->
+      <div class="produto">
+        <img src="https://via.placeholder.com/180x180?text=Produto+2" alt="Carne Bovina" />
+        <h3>Carne Bovina Kg</h3>
+        <p class="preco">R$ 29,90</p>
+      </div>
+
+      <!-- Produto 3 -->
+      <div class="produto">
+        <img src="img/download__10_-removebg-preview.png" alt="Cerveja Heineken 600ml" />
+        <h3>Cerveja Heineken 600ml</h3>
+        <p class="preco">R$ 6,50</p>
+      </div>
+
+      <!-- Produto 4 -->
+      <div class="produto">
+        <img src="img/download__11_-removebg-preview.png" alt="Pacote de Salgadinho" />
+        <h3>Pacote de Salgadinho</h3>
+        <p class="preco">R$ 3,50</p>
+      </div>
+
+      <!-- Produto 5 -->
+      <div class="produto">
+        <img src="img/download__12_-removebg-preview.png" alt="Vinho Tinto" />
+        <h3>Vinho Tinto Seco 750ml</h3>
+        <p class="preco">R$ 29,90</p>
+      </div>
+
+      <!-- Produto 6 -->
+      <div class="produto bebidas">
+        <img src="https://via.placeholder.com/180x180?text=Vinho" alt="Vinho Tinto 2" />
+        <h3>Vinho Tinto Seco 750ml</h3>
+        <p class="preco">R$ 29,90</p>
+      </div>
+
+    </div>
+  </section>
+
+</main> 
+
+  <a href="https://wa.me/5511999999999" target="_blank" class="whatsapp-float" aria-label="WhatsApp Atendimento">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M20.52 3.48a11.8 11.8 0 0 0-16.7 0 11.61 11.61 0 0 0-3.5 8.19 11.79 11.79 0 0 0 2.23 6.63L2 22l3.88-1.02a11.79 11.79 0 0 0 6.63 2.22 11.8 11.8 0 0 0 8.19-3.5 11.79 11.79 0 0 0 0-16.7zM12 20a8 8 0 0 1-4.18-1.12l-.3-.18-2.34.61.63-2.28-.2-.3A8 8 0 1 1 12 20zm3.55-5.15c-.2-.1-1.17-.58-1.35-.65s-.31-.1-.44.1-.5.65-.61.79-.22.15-.41.05a5.04 5.04 0 0 1-1.47-.9 5.57 5.57 0 0 1-1.03-1.27c-.11-.2 0-.31.08-.42.1-.1.22-.27.33-.41.11-.15.15-.26.22-.43s.03-.31 0-.43-.44-1.06-.6-1.45a.86.86 0 0 0-1.14-.39c-.31.13-.47.31-.67.48-.2.18-.41.43-.6.65s-.27.31-.45.47a1.38 1.38 0 0 0-.46.99c0 .33.1.61.31.87s.68 1.06 1.47 1.66c.78.6 1.41.8 1.65.89s.45.1.61 0 .92-.36 1.1-.44.32-.15.4-.24.13-.17.1-.27z"/>
+    </svg>
+  </a>
+  <script src="script.js"></script>
+<script>
+  // Este é o que você já tem — redireciona para o index com parâmetro na URL
+  document.querySelector('.search-bar button').addEventListener('click', function () {
+    const query = document.querySelector('.search-bar input[type="search"]').value.trim();
+    if (query) {
+      window.location.href = `introdução.html?busca=${encodeURIComponent(query)}`;
+    }
+  });
+</script>
+
+<script>
+  // Este aqui vai rodar no index.html quando a página carregar e tiver "busca" na URL
+  window.addEventListener('DOMContentLoaded', function () {
+    const params = new URLSearchParams(window.location.search);
+    const busca = params.get('busca');
+
+    if (busca) {
+      const produtos = document.querySelectorAll('.produto h3');
+      let melhorMatch = null;
+      let menorDiferenca = Infinity;
+
+      produtos.forEach(produto => {
+        const nome = produto.textContent.toLowerCase();
+        const diferenca = Math.abs(nome.length - busca.length);
+
+        if (nome.includes(busca.toLowerCase()) || diferenca < menorDiferenca) {
+          melhorMatch = produto;
+          menorDiferenca = diferenca;
+        }
+      });
+
+      if (melhorMatch) {
+        melhorMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        melhorMatch.style.background = '#ffffcc'; // destaque visual opcional
+      }
+    }
+  });
+</script>
+<script>
+  if (window.innerWidth <= 768) {
+    window.location.href = "index-mobile.html";
+  }
+</script>
+</body>
+</html>
